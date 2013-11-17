@@ -9,6 +9,7 @@
 #include <math.h>
 #include <string.h>
 #include <time.h>
+#include <iterator> 
 
 using namespace std;
 
@@ -17,9 +18,11 @@ int main(int argc, char **argv) {
 	float tiempo=0;	
 	clock_t t1;
 	map <string  ,vector<int> > indice;
-	string buf ;
-	int pos=0,posting=0;
+	string buf ,palabra1,palabra2;;
+	int pos=0,posting=0,k,i1,i2,f1,f2;
 	char r[20];
+	vector<string> vocabulario;
+	srand (time(NULL));
 
 	if (argc != 2) {
 		cout << "usage: " << argv[0] << "<2potencia>" << endl;
@@ -28,9 +31,9 @@ int main(int argc, char **argv) {
 
 	int m;
 	{
-    stringstream ss;
-    ss << argv[1];
-    ss >> m;
+		stringstream ss;
+		ss << argv[1];
+		ss >> m;
 	}
 	
 	int p = pow(2,m);	
@@ -42,8 +45,6 @@ int main(int argc, char **argv) {
 		
 		std::ifstream ifs(r);
 		std::string text1((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
-		
-	//	cout<<text1<<endl;
 		
 		stringstream ss(text1);
 		
@@ -57,7 +58,6 @@ int main(int argc, char **argv) {
 		t1 = clock()-t1;
 		
 		tiempo += ((float)t1)/CLOCKS_PER_SEC;
-		//cout<<"Tiempo promedio(pos/(m+1)):"<< tiempo/(pos/(m+1)) <<endl;
 		pos++; 		
 		buf.clear();
 		
@@ -74,105 +74,151 @@ int main(int argc, char **argv) {
     cout<<"Tiempo promedio(pos/(m+1)):"<< tiempo/(pos/(m+1)) <<endl;
 	
 	*/
+
+	//*************GENERAR VOLCABULARIO DE BUSQUEDA******************	
+		
 	
-	
-	//************BUSCARRRRRRRRRR PALABRAS*******************
-	
-	//FALTA GENERAR PALABRAS ALEATORIAS
-	string palabra="was";
-	vector<int> lista=indice[palabra];
-	
-	/*for(unsigned int i = 0; i<lista.size(); i++) {
-			cout << lista[i] <<" ";
+	for (map<string, vector<int> >::iterator it = indice.begin(); it != indice.end(); ++it) {  
+			vocabulario.push_back(it->first);
+			posting+= it->second.size();
+	}
+
+	/*for(unsigned int i = 0; i<vocabulario.size(); i++) {
+			cout << vocabulario[i] <<" ";
 	} 
 	cout<<endl;
 	*/
-	
-	//*************INTERSECCION********************************
-	string palabra1="as";
-	string palabra2="was";
-	
-	vector<int> lista1=indice[palabra1];
-	vector<int> lista2=indice[palabra2];
-	vector<int> inter;
-	
-	int i1=0,i2=0,f1=lista1.size(),f2=lista2.size();
-	
-	
-	while(i1 != f1 && i2 != f2)
-	{
-			if(lista1[i1] == lista2[i2])
-			{
-					inter.push_back(lista1[i1]);
-					i1++;i2++;
-			}else{
-					if(lista1[i1] < lista2[i2]) i1++;
-					else if(lista1[i1] > lista2[i2]) i2++;
-			}
-	}
-	
-	/*for(unsigned int i = 0; i<inter.size(); i++) {
-			cout << inter[i] <<" ";
-	} 
-	cout<<endl;*/
-	
-	//***************UNION***********************************
-	palabra1="as";
-	palabra2="was";
-	
-	vector<int> lista3=indice[palabra1];
-	vector<int> lista4=indice[palabra2];
-	vector<int> unio;
-	
-	i1=0,i2=0,f1=lista3.size(),f2=lista4.size();
-	
-	while(i1 != f1 || i2 != f2)
-	{		
-			if(i2 == f2){
-						unio.push_back(lista3[i1]);
-						i1++;
-						continue;			
-			}			
-			if(i1 == f1){
-						unio.push_back(lista4[i2]);
-						i2++;
-						continue;			
-			}				
-			if(lista3[i1] == lista4[i2])
-			{
-						unio.push_back(lista3[i1]);
-						i1++;
-						i2++;
-			}else if(lista3[i1] < lista4[i2]){ 
-						
-						unio.push_back(lista3[i1]);
-						i1++;												
-			}else if(lista3[i1] > lista4[i2])
-			{ 
-						unio.push_back(lista4[i2]);
-						i2++;											
-			}
-			
-	}
-	
-	
-	/*for(unsigned int i = 0; i<unio.size(); i++) {
-			cout << unio[i] <<" ";
-	} 
-	cout<<endl;
-	*/
-	
-	  
-	  
-	  
 	  	
 	//**************CANTIDAD DE PALABRAS Y POSTING*******************
 	
-	for (map<string, vector<int> >::iterator it = indice.begin(); it != indice.end(); ++it) 
-			posting+= it->second.size();
-	
+		
 	cout<<"POSTING=		"<<posting<<endl; //postings (parece)
 	cout<<"CANTIDAD DE PALABRAS=	"<<indice.size()<<endl; // cantidad de palabras
+	
+	
+	//************BUSCAR PALABRAS*******************
+		
+	for (k=0;k<=2;k++){
+		p = pow(2,k);
+		for(pos=1; pos<=p ;pos++){
+	
+			palabra1=vocabulario[ rand() % vocabulario.size() ];
+			vector<int> lista=indice[palabra1];
+			
+			
+			cout <<"buscar:"<<palabra1<<endl;
+			for(unsigned int i = 0; i<lista.size(); i++) {
+					cout << lista[i] <<" ";
+			} 
+			cout<<endl;
+			
+			
+			
+		}
+	}
+	//*************INTERSECCION********************************
+	
+	vector<int> lista1;
+	vector<int> lista2;
+	
+	vector<int> inter;
+	
+	for (k=0;k<=2;k++){
+		p = pow(2,k);	
+		i1=0,i2=0,f1=lista1.size(),f2=lista2.size();
+		
+		for(pos=1; pos<=p ;pos++){
+			
+			palabra1=vocabulario[ rand() % vocabulario.size() ];
+			palabra2=vocabulario[ rand() % vocabulario.size() ];	
+			
+			lista1=indice[palabra1];	
+			lista2=indice[palabra2];			
+			
+			while(i1 != f1 && i2 != f2)
+			{
+					if(lista1[i1] == lista2[i2])
+					{
+							inter.push_back(lista1[i1]);
+							i1++;i2++;
+					}else{
+							if(lista1[i1] < lista2[i2]) i1++;
+							else if(lista1[i1] > lista2[i2]) i2++;
+					}
+			}
+			
+			
+			cout <<"buscar INTERSECCION:"<<palabra1<<" y "<<palabra2<<endl;
+			for(unsigned int i = 0; i<inter.size(); i++) {
+					cout << inter[i] <<" ";
+			} 
+			cout<<endl;
+		
+			inter.clear();
+		
+		}
+	}
+	
+	//***************UNION***********************************
+	
+	vector<int> lista3;
+	vector<int> lista4;
+	
+	vector<int> unio;
+	
+	for (k=0;k<=2;k++){
+		p = pow(2,k);	
+		i1=0,i2=0,f1=lista1.size(),f2=lista2.size();
+		
+		for(pos=1; pos<=p ;pos++){
+			
+			palabra1=vocabulario[ rand() % vocabulario.size() ];
+			palabra2=vocabulario[ rand() % vocabulario.size() ];	
+			
+			lista3=indice[palabra1];	
+			lista4=indice[palabra2];
+			
+			while(i1 != f1 || i2 != f2)
+			{		
+					if(i2 == f2){
+								unio.push_back(lista3[i1]);
+								i1++;		
+					}			
+					else if(i1 == f1){
+								unio.push_back(lista4[i2]);
+								i2++;									
+					}				
+					else if(lista3[i1] == lista4[i2])
+					{
+								unio.push_back(lista3[i1]);
+								i1++;
+								i2++;
+					}else if(lista3[i1] < lista4[i2]){ 
+								
+								unio.push_back(lista3[i1]);
+								i1++;												
+					}else if(lista3[i1] > lista4[i2])
+					{ 
+								unio.push_back(lista4[i2]);
+								i2++;											
+					}
+					
+			}
+			
+			cout <<"buscar UNION:"<<palabra1<<" y "<<palabra2<<endl;
+			for(unsigned int i = 0; i<unio.size(); i++) {
+				cout << unio[i] <<" ";
+			} 
+			cout<<endl;
+			
+			unio.clear();
+			
+		}
+	
+	}
+	
+	
+	
 		
 	return 0;
 }
