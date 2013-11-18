@@ -125,7 +125,7 @@ int main(int argc, char **argv) {
 	
 	for (k=0;k<=2;k++){
 		p = pow(2,k);	
-		i1=0,i2=0,f1=lista1.size(),f2=lista2.size();
+		
 		
 		for(pos=1; pos<=p ;pos++){
 			
@@ -133,7 +133,9 @@ int main(int argc, char **argv) {
 			palabra2=vocabulario[ rand() % vocabulario.size() ];	
 			
 			lista1=indice[palabra1];	
-			lista2=indice[palabra2];			
+			lista2=indice[palabra2];
+						
+			i1=0,i2=0,f1=lista1.size(),f2=lista2.size();
 			
 			while(i1 != f1 && i2 != f2)
 			{
@@ -167,8 +169,7 @@ int main(int argc, char **argv) {
 	vector<int> unio;
 	
 	for (k=0;k<=2;k++){
-		p = pow(2,k);	
-		i1=0,i2=0,f1=lista1.size(),f2=lista2.size();
+		p = pow(2,k);		
 		
 		for(pos=1; pos<=p ;pos++){
 			
@@ -177,6 +178,8 @@ int main(int argc, char **argv) {
 			
 			lista3=indice[palabra1];	
 			lista4=indice[palabra2];
+			
+			i1=0,i2=0,f1=lista1.size(),f2=lista2.size();
 			
 			while(i1 != f1 || i2 != f2)
 			{		
