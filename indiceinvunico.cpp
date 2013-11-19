@@ -57,10 +57,10 @@ int main(int argc, char **argv) {
 		*/
 		//*************GENERAR VOLCABULARIO DE BUSQUEDA******************			
 		
-		for (map<string, vector<int> >::iterator it = indice.begin(); it != indice.end(); ++it) {  
+		/*for (map<string, vector<int> >::iterator it = indice.begin(); it != indice.end(); ++it) {  
 				vocabulario.push_back(it->first);
 				posting+= it->second.size();
-		}
+		}*/
 		/*	IMPRIMIR VOCABULARIO
 		 * 
 		 * for(unsigned int i = 0; i<vocabulario.size(); i++) {
